@@ -1,0 +1,16 @@
+/* Explicit extension URLs keep fonts working on nested Amp routes. */
+@font-face {
+  font-family: "Amp UI Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("chrome-extension://__MSG_@@extension_id__/fonts/inter-latin-wght-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Amp UI Inter";
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("chrome-extension://__MSG_@@extension_id__/fonts/inter-latin-wght-italic.woff2") format("woff2");
+}

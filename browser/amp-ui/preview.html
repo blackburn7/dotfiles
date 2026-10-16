@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Amp UI · local preview</title>
+  <style>
+    @font-face {
+      font-family: "Amp UI Inter"; font-weight: 100 900; font-style: normal;
+      src: url("fonts/inter-latin-wght-normal.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Amp UI Inter"; font-weight: 100 900; font-style: italic;
+      src: url("fonts/inter-latin-wght-italic.woff2") format("woff2");
+    }
+    :root {
+      color-scheme: dark;
+      --background: #17191d; --foreground: #e1e3e8; --secondary: #24272d;
+      --sidebar: #131519; --border: #30333c; --muted-foreground: #9299a6;
+      --link: #8ab5ff; --terminal-bright-blue: #80acff;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+      --amp-text-size-scale: 1; --thread-column-max-width: 42rem;
+    }
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --background: #fff; --foreground: #24272d; --secondary: #f2f3f5;
+      --sidebar: #f8f9fa; --border: #dedfe3; --muted-foreground: #686e7a;
+      --link: #2457bc; --terminal-bright-blue: #2b64ce;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: calc(13px * var(--amp-text-size-scale))/1.65 system-ui, sans-serif; background: var(--background); color: var(--foreground); }
+    button, select, input { font: inherit; }
+    button, select { color: inherit; background: var(--secondary); border: 1px solid var(--border); border-radius: 6px; padding: 6px 9px; }
+    button { cursor: pointer; }
+    button:focus-visible, select:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
+    .preview-bar { min-height: 66px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 14px 24px; border-bottom: 1px solid var(--border); }
+    .preview-title { display: flex; align-items: baseline; gap: 12px; }
+    .preview-title strong { font-size: 16px; letter-spacing: -.5px; }
+    .muted { color: var(--muted-foreground); }
+    .preview-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; }
+    .preview-controls label { display: inline-flex; align-items: center; gap: 7px; }
+    input { accent-color: var(--link); }
+    .app { display: grid; grid-template-columns: 228px minmax(0, 1fr); min-height: calc(100vh - 66px); }
+    aside { background: var(--sidebar); padding: 26px 12px; border-right: 1px solid var(--border); }
+    .workspace { padding: 0 10px 28px; font-size: 15px; font-weight: 600; }
+    .group-label { display: flex; align-items: center; gap: 7px; width: 100%; padding: 8px 10px; background: none; border: 0; color: var(--muted-foreground); text-align: left; }
+    .group-label > span { margin-left: auto; }
+    .group\/thread-row { display: flex; gap: 10px; align-items: center; padding: 9px 10px; border-radius: 6px; }
+    .group\/thread-row .text-base { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .thread-icon { width: 16px; flex-shrink: 0; position: relative; color: var(--muted-foreground); }
+    [data-thread-row-unread-badge] { position: absolute; width: 6px; height: 6px; border-radius: 50%; top: 0; right: 0; background: var(--terminal-bright-blue); }
+    .opacity-100 { opacity: 1; } .opacity-0 { opacity: 0; }
+    .font-medium { font-weight: 500; }
+    .bg-accent { background: var(--secondary); }
+    main { min-width: 0; padding: 0 24px 36px; }
+    .thread-heading { min-height: 76px; display: flex; gap: 12px; align-items: center; border-bottom: 1px solid var(--border); }
+    .thread-heading h1 { font-size: 13px; font-weight: 500; margin: 0; }
+    .thread-heading span { margin-left: auto; color: var(--muted-foreground); }
+    .thread-chat-scroll-region { padding-top: 30px; }
+    [data-thread-transcript-content] { max-width: var(--thread-column-max-width); margin-inline: auto; padding-inline: 24px; }
+    .alchemy-glow { margin-bottom: 28px; border-radius: 9px; padding: 15px 18px; background: radial-gradient(ellipse at top right, #48688840, transparent), var(--secondary); }
+    .role { display: flex; align-items: center; gap: 8px; color: var(--muted-foreground); margin-bottom: 12px; font-size: 11px; }
+    .amp-mark { font-weight: 700; color: var(--foreground); font-size: 12px; }
+    .markdown h1 { font-size: 1.8em; } .markdown h2 { font-size: 1.5em; }
+    .markdown h3 { font-size: 1.25em; } .markdown h2 { border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+    .markdown p, .markdown ul { margin: 1.2em 0; }
+    .markdown a { color: inherit; }
+    .markdown code { font-family: var(--font-mono); }
+    .markdown :not(pre) > code { background: var(--secondary); border-radius: 3px; padding: 2px 4px; }
+    .markdown pre { background: var(--sidebar); padding: 18px; overflow-x: auto; }
+    .markdown blockquote { border-left: 2px solid var(--border); margin-left: 0; padding-left: 16px; color: var(--muted-foreground); }
+    .markdown table { width: 100%; border-collapse: collapse; }
+    .markdown th, .markdown td { text-align: left; padding: 9px 12px; border: 1px solid var(--border); }
+    .markdown th { background: var(--secondary); font-weight: 600; }
+    [data-testid="transcript-selection-actions"] { display: flex; gap: 8px; margin: 18px 0; }
+    .composer { max-width: var(--thread-column-max-width); margin: 30px auto 0; padding: 16px; border: 1px solid var(--border); border-radius: 10px; }
+    .composer-foot { display: flex; justify-content: space-between; margin-top: 22px; color: var(--muted-foreground); font-size: 11px; }
+    .sample-note { margin: 20px auto 0; max-width: var(--thread-column-max-width); color: var(--muted-foreground); font-size: 11px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    @media (max-width: 720px) {
+      .app { grid-template-columns: minmax(0, 1fr); }
+      aside { display: none; } main { padding-inline: 16px; }
+      .preview-bar { padding-inline: 16px; }
+      [data-thread-transcript-content] { padding-inline: 0; }
+      .thread-heading span { display: none; }
+    }
+  </style>
+  <link id="amp-styles" rel="stylesheet" href="amp.css">
+  <link id="custom-styles" rel="stylesheet" href="custom.css">
+</head>
+<body>
+  <header class="preview-bar">
+    <div class="preview-title"><strong>Amp UI</strong><span class="muted">Local sample preview</span></div>
+    <div class="preview-controls">
+      <label><input id="styles-enabled" type="checkbox" checked> Tweaks on</label>
+      <label>Theme <select id="theme"><option value="dark">Dark</option><option value="light">Light</option></select></label>
+    </div>
+  </header>
+  <div class="app">
+    <aside aria-label="Sample sidebar">
+      <div class="workspace">Personal workspace</div>
+      <div class="group-label" data-testid="sidebar-thread-group-header">⌄ &nbsp; Today <span>● <span class="sr-only">2 unread threads</span></span></div>
+      <div class="group/thread-row bg-accent"><span class="thread-icon">◇</span><span class="text-base font-medium">A calmer place to build</span></div>
+      <div class="group/thread-row"><span class="thread-icon">◇<i data-thread-row-unread-badge class="opacity-100"></i></span><span class="text-base font-medium">Refine the settings page</span></div>
+      <div class="group/thread-row"><span class="thread-icon">◇<i data-thread-row-unread-badge class="opacity-100"></i></span><span class="text-base font-medium">Review keyboard shortcuts</span></div>
+      <div class="group/thread-row"><span class="thread-icon">◇<i data-thread-row-unread-badge class="opacity-0"></i></span><span class="text-base">Update the documentation</span></div>
+    </aside>
+    <main>
+      <div class="thread-heading"><h1>A calmer place to build</h1><span>Sample conversation · no account connection</span></div>
+      <div class="thread-chat-scroll-region">
+        <div data-thread-transcript-content>
+          <div class="alchemy-glow alchemy-hairline">Make the interface a little quieter. Give the conversation room to breathe, and make the typography feel consistent.</div>
+          <div class="role"><span class="amp-mark">amp</span><span>Sample response</span></div>
+          <article class="markdown">
+            <p>The starter brings the transcript into focus with <strong>Inter Variable</strong>, a wider reading column, and a simpler message surface.</p>
+            <h2>Small changes, throughout</h2>
+            <ul>
+              <li><p>Compact headings with a clear visual hierarchy.</p></li>
+              <li><p>Tighter lists and consistent paragraph spacing.</p></li>
+              <li><p>Unread threads that are easier to pick out.</p></li>
+            </ul>
+            <p>The code keeps its monospace font. Adjust the defaults in <code>custom.css</code>:</p>
+            <pre><code>:root {
+  --amp-ui-text-scale: 1.1;
+  --amp-ui-column-width: 54rem;
+  --amp-ui-paragraph-gap: 0.9em;
+}</code></pre>
+            <h3>Make it yours</h3>
+            <p>Try a larger font, more space between paragraphs, or a different link color. <a href="https://github.com/tjbai/dotfiles/tree/main/firefox/amp-tweaks" target="_blank" rel="noreferrer">See the original inspiration</a>.</p>
+            <blockquote><p><em>Your existing Amp theme provides the colors.</em> The preview has sample light and dark palettes so you can check both.</p></blockquote>
+            <table><thead><tr><th>Detail</th><th>Starter setting</th></tr></thead><tbody><tr><td>Reading column</td><td>54rem</td></tr><tr><td>Body weight</td><td>450</td></tr><tr><td>Selection toolbar</td><td>Hidden</td></tr></tbody></table>
+          </article>
+          <div data-testid="transcript-selection-actions" aria-label="Example selection toolbar"><button type="button">Reply</button><button type="button">Copy</button><button type="button">Link</button></div>
+        </div>
+        <div class="composer" aria-label="Sample composer, not interactive"><span class="muted">What would you like to change next?</span><div class="composer-foot"><span>Sample composer</span><span>↵</span></div></div>
+        <p class="sample-note">This page demonstrates the CSS on sample markup. The installed extension styles Amp's actual interface.</p>
+      </div>
+    </main>
+  </div>
+  <script>
+    document.querySelector('#styles-enabled').addEventListener('change', event => {
+      for (const id of ['amp-styles', 'custom-styles']) {
+        document.getElementById(id).disabled = !event.target.checked;
+      }
+    });
+    document.querySelector('#theme').addEventListener('change', event => {
+      document.documentElement.dataset.theme = event.target.value;
+    });
+  </script>
+</body>
+</html>

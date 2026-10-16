@@ -1,0 +1,26 @@
+/* Edit this file, reload Amp UI in chrome://extensions, then refresh Amp.
+   This is loaded last, so additional overrides can go below the settings. */
+:root {
+  --amp-ui-font-family: "Amp UI Inter", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  --amp-ui-text-scale: 0.92; /* Reference size. Try 1 or 1.1 for larger text. */
+  --amp-ui-text-weight: 450;
+  --amp-ui-column-width: 54rem; /* Transcript width, excluding comments. */
+  --amp-ui-paragraph-gap: 0.9em;
+  --amp-ui-code-radius: 4px;
+  --amp-ui-unread-color: var(--terminal-bright-blue, var(--link, #579bff));
+
+  --amp-ui-selection-toolbar: none; /* Set to flex to show the toolbar. */
+  --amp-ui-group-status: none; /* Set to inline-flex to show group status dots. */
+}
+
+/* Amp's current light/dark colors remain in use. To customize them, add
+   semantic color overrides here, for example:
+
+   :root {
+     --link: #7aa2f7 !important;
+   }
+
+   Other useful Amp variables: --background, --foreground, --secondary,
+   --border, --sidebar, --muted-foreground. Choose colors for your active theme.
+*/

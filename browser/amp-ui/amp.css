@@ -1,0 +1,125 @@
+/* Personal Amp styles, informed by tjbai/dotfiles/firefox/amp-tweaks.
+   Keep customization in custom.css. Avoid generated Svelte class names.
+   !important is needed to override the site's component styles. */
+
+:root {
+  --font-sans: var(--amp-ui-font-family, system-ui, sans-serif) !important;
+  --default-font-family: var(--font-sans) !important;
+  --amp-text-size-scale: var(--amp-ui-text-scale, 0.92) !important;
+}
+
+body {
+  font-family: var(--font-sans) !important;
+}
+
+body,
+.markdown {
+  font-weight: var(--amp-ui-text-weight, 450) !important;
+  font-feature-settings: "cv01", "ss03" !important;
+}
+
+/* Selection actions remain available by setting the display value to flex. */
+[data-testid="transcript-selection-actions"] {
+  display: var(--amp-ui-selection-toolbar, none) !important;
+}
+
+/* Transcript typography */
+.markdown :is(h1, h2, h3, h4, h5, h6) {
+  margin: 1.6em 0 0.5em !important;
+  padding-bottom: 0 !important;
+  border-bottom: 0 !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  letter-spacing: -0.01em !important;
+}
+
+.markdown h1 { font-size: 1.33em !important; }
+.markdown h2 { font-size: 1.13em !important; }
+.markdown h3 { font-size: 1.03em !important; }
+.markdown :is(h4, h5, h6) { font-size: 1em !important; }
+
+.markdown :is(p, ul, ol, pre, blockquote) {
+  margin-block: var(--amp-ui-paragraph-gap, 0.9em) !important;
+}
+
+.markdown :is(ul, ol) { padding-left: 1.4em !important; }
+.markdown li { margin-block: 0.15em !important; padding-left: 0 !important; }
+.markdown li > p { margin-block: 0 !important; }
+.markdown > :first-child { margin-top: 0 !important; }
+.markdown > :last-child { margin-bottom: 0 !important; }
+.markdown strong { font-weight: 600 !important; }
+
+.markdown a:not([data-amp-link-chip]) {
+  color: var(--link, #579bff) !important;
+  text-decoration: none !important;
+}
+
+.markdown a:not([data-amp-link-chip]):is(:hover, :focus-visible) {
+  text-decoration: underline !important;
+}
+
+/* Keep Amp's monospace font and reset the sans-serif font features. */
+.markdown :is(code, pre, kbd) {
+  font-family: var(--font-mono, "Berkeley Mono", ui-monospace, monospace) !important;
+  font-weight: 400 !important;
+  font-feature-settings: normal !important;
+}
+
+.markdown code { font-size: 0.95em !important; }
+.markdown pre {
+  border: 1px solid var(--border, currentColor) !important;
+  border-radius: var(--amp-ui-code-radius, 4px) !important;
+  padding: 12px 14px !important;
+  font-size: 0.95em !important;
+  line-height: 1.6 !important;
+  overflow-x: auto;
+}
+.markdown pre code { font-size: inherit !important; }
+.markdown blockquote { border-left-width: 3px !important; padding: 0 0 0 12px !important; }
+.markdown table { font-size: 0.9em !important; border-radius: 4px !important; }
+
+/* Flat user messages. Remove this block to restore Amp's glow. */
+.alchemy-glow {
+  background-image: none !important;
+  background-color: var(--color-secondary, var(--secondary)) !important;
+  background-blend-mode: normal !important;
+  color: var(--foreground) !important;
+}
+.alchemy-glow.alchemy-hairline { --alchemy-hairline-opacity: 0 !important; }
+
+/* Match TJ's width override: keep the composer 3rem wider than the transcript,
+   including in full-width mode. The comment grid below still leaves Amp's
+   full-width and expanded-comment layouts alone, as in the reference. */
+:root {
+  --thread-column-max-width: calc(var(--amp-ui-column-width, 54rem) + 3rem) !important;
+}
+
+.thread-chat-scroll-region .max-w-2xl {
+  max-width: calc(var(--amp-ui-column-width, 54rem) + 3rem) !important;
+}
+
+html:not([data-thread-width="full"])
+  [data-transcript-entry-list].transcript-comments-grid:not([style*="18rem"]) {
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, var(--amp-ui-column-width, 54rem))
+    max(3rem, calc((100% - var(--amp-ui-column-width, 54rem)) / 2)) !important;
+}
+
+/* Unread thread emphasis; the selected row keeps Amp's active styling. */
+.group\/thread-row:not(.bg-accent):has([data-thread-row-unread-badge].opacity-100)
+  .text-base.font-medium {
+  color: var(--amp-ui-unread-color, var(--link)) !important;
+  font-weight: 650 !important;
+}
+
+.group\/thread-row [data-thread-row-unread-badge].opacity-100 {
+  transform: scale(1.33) !important;
+  background: var(--amp-ui-unread-color, var(--link)) !important;
+  box-shadow: 0 0 0 1.5px var(--sidebar, var(--background)) !important;
+}
+
+/* This hook only targets status clusters, preserving the group's error text. */
+[data-testid="sidebar-thread-group-header"] span:has(> .sr-only) {
+  display: var(--amp-ui-group-status, none) !important;
+}

@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Amp UI",
+  "version": "0.1.0",
+  "description": "Personal typography and layout tweaks for ampcode.com.",
+  "content_scripts": [
+    {
+      "matches": ["https://ampcode.com/*"],
+      "css": ["fonts.css", "amp.css", "custom.css"],
+      "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["fonts/*.woff2"],
+      "matches": ["https://ampcode.com/*"]
+    }
+  ]
+}
