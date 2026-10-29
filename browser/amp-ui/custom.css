@@ -8,19 +8,43 @@
   --amp-ui-column-width: 54rem; /* Transcript width, excluding comments. */
   --amp-ui-paragraph-gap: 0.9em;
   --amp-ui-code-radius: 4px;
-  --amp-ui-unread-color: var(--terminal-bright-blue, var(--link, #579bff));
+  --amp-ui-unread-color: var(--link, #579bff);
 
   --amp-ui-selection-toolbar: none; /* Set to flex to show the toolbar. */
   --amp-ui-group-status: none; /* Set to inline-flex to show group status dots. */
 }
 
-/* Amp's current light/dark colors remain in use. To customize them, add
-   semantic color overrides here, for example:
+/* Muted purple palette. Amp's default theme ("Daydream", theme-0) tints its
+   surfaces and text green; this replaces those tints with low-chroma purple
+   and leaves success/warning/destructive alone. It only applies while the
+   default theme is active, so switching Amp themes still works. Amp declares
+   these on :root, .scheme-light/.scheme-dark and [data-amp-content-theme],
+   so the same selectors are used here. Each value is light-dark(light, dark). */
+:is(html[data-amp-theme="theme-0"], html:not([data-amp-theme])),
+:is(html[data-amp-theme="theme-0"], html:not([data-amp-theme]))
+  :is(.scheme-light, .scheme-dark, [data-amp-content-theme], .app-shell) {
+  --background: light-dark(#faf9fc, #0e0d13) !important;
+  --foreground: light-dark(#17141f, #ece8f3) !important;
+  --muted: light-dark(#ebe8f0, #8c84a01a) !important;
+  --muted-foreground: light-dark(#5d5769, #9d97ab) !important;
+  --border: #8c84a033 !important;
+  --card: light-dark(#17141f05, #ece8f308) !important;
+  --input-border: light-dark(#17141f26, #ece8f326) !important;
+  --input-background: light-dark(#fcfbfd, #0e0d13) !important;
+  --primary-hover: light-dark(#2a2633, #d8d2e3) !important;
+  --secondary: light-dark(#e2dee8, #2a2633) !important;
+  --secondary-hover: light-dark(#d5d0dd, #352f40) !important;
+  --secondary-foreground: light-dark(#2a2633, #ece8f3) !important;
+  --accent: light-dark(#17141f12, #ece8f312) !important;
+  --ring: light-dark(#6a5ca6, #a497d2) !important;
+  --link: light-dark(#5f52a6, #a39bd0) !important;
+  --app-shell-background: light-dark(#e6e2ec, #13111a) !important;
+  --app-shell-foreground: light-dark(#17141f, #ccc8d6) !important;
+  --app-surface-background: light-dark(#fbfafd, #15131c) !important;
+}
 
-   :root {
-     --link: #7aa2f7 !important;
-   }
-
-   Other useful Amp variables: --background, --foreground, --secondary,
-   --border, --sidebar, --muted-foreground. Choose colors for your active theme.
-*/
+/* Focus and hover glows derive from these RGB triplets. */
+:is(html[data-amp-theme="theme-0"], html:not([data-amp-theme])) .alchemy-glow {
+  --alchemy-glow-primary: 157 140 205 !important;
+  --alchemy-glow-primary-light: 106 92 166 !important;
+}

@@ -65,6 +65,16 @@ body,
   font-feature-settings: normal !important;
 }
 
+/* The body weight and Inter feature tags above are inherited by monospace
+   text outside .markdown (diffs, terminal, file paths, the composer). Amp's
+   preflight already resets feature tags on code/pre/kbd/samp, but not on
+   .font-mono utility elements and not the weight. No !important here, so
+   Amp's own kbd and keycap feature settings still win. */
+code, pre, kbd, samp, .font-mono {
+  font-feature-settings: normal;
+  font-weight: 400;
+}
+
 .markdown code { font-size: 0.95em !important; }
 .markdown pre {
   border: 1px solid var(--border, currentColor) !important;
@@ -89,8 +99,12 @@ body,
 
 /* Match TJ's width override: keep the composer 3rem wider than the transcript,
    including in full-width mode. The comment grid below still leaves Amp's
-   full-width and expanded-comment layouts alone, as in the reference. */
-:root {
+   full-width and expanded-comment layouts alone, as in the reference.
+   In the Default thread width Amp sets this variable on
+   [data-thread-chat-v2-pane] > * via container queries, which shadows an
+   inherited :root value, so declare it there too. */
+:root,
+[data-thread-chat-v2-pane] > * {
   --thread-column-max-width: calc(var(--amp-ui-column-width, 54rem) + 3rem) !important;
 }
 

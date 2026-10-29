@@ -6,8 +6,9 @@ JavaScript content script, background process, or remote font request.
 
 Inspired by [tjbai's Amp tweaks](https://github.com/tjbai/dotfiles/tree/main/firefox/amp-tweaks).
 The starter uses its compact typography, 54rem transcript, flat user messages,
-blue unread threads, and hidden selection toolbar/group status dots. Amp's
-existing color theme stays active. Font assets come from that reference;
+purple unread threads, and hidden selection toolbar/group status dots. On
+Amp's default theme the green tints are replaced with a muted purple palette;
+other Amp themes are left alone. Font assets come from that reference;
 Inter is by Rasmus Andersson and is distributed under the SIL Open Font License
 in `fonts/OFL.txt`.
 
@@ -38,7 +39,13 @@ Edit `custom.css`, then click the reload icon on **Amp UI** in
 | `--amp-ui-paragraph-gap` | `0.9em` | `1.1em` for more space |
 | `--amp-ui-selection-toolbar` | `none` | `flex` to restore |
 | `--amp-ui-group-status` | `none` | `inline-flex` to restore |
-| `--amp-ui-unread-color` | Amp's bright blue | Any CSS color |
+| `--amp-ui-unread-color` | `var(--link)` (muted purple) | Any CSS color |
+
+The muted purple palette is the labeled block at the bottom of `custom.css`.
+It applies only while Amp's default theme ("Daydream") is active; pick another
+theme in Amp's appearance settings and Amp's own colors return. Edit the
+`light-dark(light, dark)` pairs to retune it, or delete the block for Amp's
+default green. Success, warning, and destructive colors are not changed.
 
 To restore the user-message glow, remove the labeled block in `amp.css`.
 The font scale and width variable override Amp's appearance settings while the
@@ -62,6 +69,9 @@ Selectors are based on the reference extension's Amp DOM hooks. They avoid
 generated Svelte class names, but Amp can still change those hooks. If a tweak
 stops working, inspect the affected element and update its selector. The
 comment layout additionally relies on Amp's inline `18rem` expanded gutter.
+Amp's Default thread width sets `--thread-column-max-width` on a descendant
+(`[data-thread-chat-v2-pane] > *`) rather than `:root`, so the width override
+targets both; a `:root`-only override is silently shadowed there.
 
 References: [Chrome content scripts](https://developer.chrome.com/docs/extensions/develop/concepts/content-scripts),
 [loading an unpacked extension](https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world#load-unpacked).
