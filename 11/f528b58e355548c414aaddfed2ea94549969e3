@@ -1,0 +1,24 @@
+browser/amp-ui/amp.css
+  s_c2ee1838f5610a::t_f8f3b54a2b1e77 68-77
+  s_c2ee1838f5610a::t_e34ba7d460749e 102-107
+browser/amp-ui/custom.css
+  s_c2ee1838f5610a::t_411e159e81f500 11,17-44,46-50
+browser/amp-ui/README.md
+  s_c2ee1838f5610a::t_2c432d55c5303f 9-11,42-48,72-74
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "11f528b58e355548c414aaddfed2ea94549969e3",
+  "prompts": {},
+  "sessions": {
+    "s_c2ee1838f5610a": {
+      "agent_id": {
+        "tool": "amp",
+        "id": "T-581335dc-c28f-4a23-b73f-5a8560368ca3",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": "Matt Blackburn <matt@getauctor.com>"
+    }
+  }
+}
